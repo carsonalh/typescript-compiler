@@ -1,10 +1,17 @@
 CC=gcc
-CFLAGS=-g -Wall -Werror -Wpedantic
+CFLAGS=-g -std=c99 -Wall -Werror
+SOURCES=token.c parse.c main.c
 
 all: compile
 
 clean:
 	rm compile
 
-compile: parse.c
-	gcc $(CFLAGS) -o $@ $^
+compile: $(SOURCES:%.c=objects/%.o)
+	$(CC) -o $@ $^
+
+objects/%.o: sources/%.c sources/compile.h | objects
+	$(CC) $(CFLAGS) -c $< -o $@
+
+objects:
+	mkdir -p $@
